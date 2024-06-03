@@ -1,43 +1,64 @@
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { useAutoAnimate } from '@formkit/auto-animate/react';
+import * as Yup from 'yup';
 import css from './ContactForm.module.css';
-import {Formik, Form, Field, ErrorMessage} from 'formik'
-import { nanoid } from 'nanoid'
-import * as Yup from "yup";
+import { addContact } from '../../redux/contactsSlice';
+import { useDispatch } from 'react-redux';
 
-import { addContact } from "../../redux/contactsSlice";
-import { useDispatch } from "react-redux";
-
-
-const contactFormSchema = Yup.object().shape({
-    name: Yup.string().min(3, "Too Short!").max(50, "Too Long!").required("Required"),
-    phone: Yup.number().required("Required")
+const UserSchema = Yup.object().shape({
+  name: Yup.string()
+    .min(3, 'Too short')
+    .max(50, 'Too long')
+    .required('This field is required'),
+  number: Yup.string()
+    .matches(/^\d{3}-\d{2}-\d{2}$/, 'Invalid number format')
+    .required('This field is required'),
 });
 
-export default function ContactForm () {
-    const dispatch = useDispatch();
+const initialValues = {
+  name: '',
+  number: '',
+};
 
-    const handleSubmit = (values, actions)=> {
-        values.id = nanoid();
-        const {name, phone} = values;
-        dispatch(addContact(name, phone));
-        actions.resetForm();
-    }
+export default function ContactForm() {
+  const [parent] = useAutoAnimate({
+    easing: 'linear',
+    duration: 300,
+  });
 
-    return (<div>
-        <Formik initialValues={{ name: "", phone: "" }} onSubmit={handleSubmit} validationSchema={contactFormSchema}>
-            <Form className={css.form}>
-                <div className={css.inputBox}>
-                    <label htmlFor="username" className={css.label}>Name</label>
-                    <Field type='text' name='name' id='username'className={css.nameInput}></Field>
-                    <ErrorMessage name='name' component='span' className={css.error}/>
-                </div>
-                <div  className={css.inputBox}>
-                    <label htmlFor="phone" className={css.label}>Phone number</label>
-                    <Field type='tel' name='phone' id='phone' className={css.phoneInput}></Field>
-                    <ErrorMessage name='phone' component='span' className={css.error}/>
-                </div>
-                
-                <button type='submit' className={css.btnAdd}>Add contact</button>
-            </Form>
-        </Formik>
-    </div>)
+  const dispatch = useDispatch();
+
+  const handleSubmit = (values, actions) => {
+    dispatch(addContact(values));
+    actions.resetForm();
+  };
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={UserSchema}
+      onSubmit={handleSubmit}
+    >
+      <Form className={css.form}>
+        <div ref={parent} className={css.wrapper}>
+          <label htmlFor="name">Name</label>
+          <Field className={css.input} type="text" name="name" />
+          <ErrorMessage className={css.error} name="name" component="span" />
+        </div>
+        <div ref={parent} className={css.wrapper}>
+          <label htmlFor="number">Number</label>
+          <Field
+            className={css.input}
+            type="text"
+            name="number"
+            placeholder="XXX-XX-XX"
+          />
+          <ErrorMessage className={css.error} name="number" component="span" />
+        </div>
+        <button className={css.formButton} type="submit">
+          Add contact
+        </button>
+      </Form>
+    </Formik>
+  );
 }

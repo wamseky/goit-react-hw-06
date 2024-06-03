@@ -1,10 +1,15 @@
-.searchBox {
-    display: flex;
-    flex-direction: column;
-    width: 318px;
-    padding: 0;
-    margin-bottom: 32px;
-}
-.label {
-    margin-bottom: 6px;
-}
+.text {
+    margin-bottom: 3px;
+  }
+  
+  .input {
+    border: 1px solid black;
+    border-radius: 7px;
+    padding: 4px 10px;
+    outline: none;
+    min-width: 230px;
+  }
+  
+  .wrapper {
+    margin-bottom: 30px;
+  }
