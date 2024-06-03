@@ -1,7 +1,7 @@
 import ContactList from '../ContactList/ContactList';
 import SearchBox from '../SearchBox/SearchBox';
 import ContactForm from '../ContactForm/ContactForm';
-import css from './App.module.css';
+import css from "../App/App.css"
 
 export default function App() {
   return (
