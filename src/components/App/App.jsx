@@ -1,15 +1,17 @@
-import ContactList from '../ContactList/ContactList';
-import SearchBox from '../SearchBox/SearchBox';
 import ContactForm from '../ContactForm/ContactForm';
-import css from "../App/App.css"
+import ContactList from '../ContactList/ContactList';
+import Searchbox from "../SearchBox/SearchBox.jsx";
+import './App.css';
 
-export default function App() {
+const App = () => {
   return (
-    <section className={css.page}>
-      <h1 className={css.title}>Phonebook</h1>
+    <div>
+      <h1>Phonebook</h1>
       <ContactForm />
-      <SearchBox />
+      <Searchbox />
       <ContactList />
-    </section>
+    </div>
   );
-}
+};
+
+export default App;
